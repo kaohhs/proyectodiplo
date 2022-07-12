@@ -6,3 +6,8 @@ npm i
 # This will install all dependencies related on the project,
 
 # afterwards, go to your [localhost:3001] 
+
+
+
+
+
