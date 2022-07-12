@@ -6,7 +6,7 @@ const path = require('path');
 const { Mongoose } = require('./database');
 const app = express();
 const jwt = require('jsonwebtoken');
-
+const register = require('./controllers/registerController')
 
 app.use(express.json());
 
@@ -25,21 +25,26 @@ server.use(express.json());
 
 server.use('/api/tasks', require('./routes/task.routes'));
 
-server.post('/api/login', (req, res) =>{
-     const user = {
-   
-        id: 1,
-        name: "Marcelo",
-        email: "kaohhs@gmail.com",
-     
- 
-    }
-    jwt.sign({user}, 'secretkey', (err, token) => {
-      res.json({
-        token
-        });
-      });
+server.post('/api/register', async (req, res, next) =>{
+    const data = await req.body;
+    register(data, res, next);
   })
+
+  server.post('/api/login', (req, res) =>{
+    const user = {
+  
+       id: 1,
+       name: "Marcelo",
+       email: "kaohhs@gmail.com",
+    
+
+   }
+   jwt.sign({user}, 'secretkey', (err, token) => {
+     res.json({
+       token
+       });
+     });
+ })
 
   server.delete("/api/tasks", verifyToken, (req , res) => {
 
