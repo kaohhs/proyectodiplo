@@ -10,7 +10,7 @@
     "build": "webpack --mode production"
   },
   "keywords": [],
-  "author": "Carlos Vazquez, Marcelo Fernandez",
+  "author": "Marcelo Fernandez",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
