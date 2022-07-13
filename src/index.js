@@ -27,7 +27,13 @@ server.use('/api/tasks', require('./routes/task.routes'));
 
 server.post('/api/register', async (req, res, next) =>{
     const data = await req.body;
-    register(data, res, next);
+    
+    try {
+        await register(data);
+        res.status(201).json({ message: 'User created successfully' });
+      } catch (error) {
+        next(error);
+      }
   })
 
   server.post('/api/login', (req, res) =>{
