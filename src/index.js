@@ -7,6 +7,7 @@ const { Mongoose } = require('./database');
 const app = express();
 const jwt = require('jsonwebtoken');
 const register = require('./controllers/registerController')
+const Task = require('./models/task')
 
 app.use(express.json());
 
@@ -35,6 +36,16 @@ server.post('/api/register', async (req, res, next) =>{
         next(error);
       }
   })
+
+  
+//Searching by title 
+  server.get('/post', async (req, res) =>{
+      const title = req.query.title
+      const searchResult = await Task.findOne({title: title})
+      res.status(200).json(searchResult);
+    })
+  
+
 
   server.post('/api/login', (req, res) =>{
     const user = {
