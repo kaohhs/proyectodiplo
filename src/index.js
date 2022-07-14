@@ -57,7 +57,7 @@ server.post('/api/register', async (req, res, next) =>{
     res.status(200).json(searchDescriptionResult);
   })
 
-// This is where the token generates and allow to see stuff
+// This is where the token generates and allow to see stuff method POST on postman
 server.post('/api/login', (req, res) =>{
     const user = {
   
@@ -88,7 +88,7 @@ function verifyToken(req, res, next){
   }
 }
 
-// Delete task - if we don't provide token on header and try http://localhost:3001/api/tasks will throw a 403 error because we didn not provided any authorized token on header for that operation. For getting the token, 1st  we must go into localhost://localhost:3001/api/login and get the Token. After that, we can set the header with the provided token by JWT and use DELETE method on Postman. 
+// Delete task - if we don't provide token on header and try http://localhost:3001/api/tasks will throw a 403 error because we did not provided any authorized token on header for that operation. For getting the token, 1st  we must go into localhost://localhost:3001/api/login and get the Token. After that, we can set the header with the provided token by JWT and use DELETE method on Postman. 
 server.delete("/api/tasks", verifyToken, (req , res) => {
 
     jwt.verify(req.token, 'secretkey', (error, authData) => {
