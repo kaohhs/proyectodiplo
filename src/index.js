@@ -61,7 +61,9 @@ server.post('/api/register', async (req, res, next) =>{
 server.post('/api/login', (req, res) =>{
     const user = {
   
-       user
+       id: 1,
+       name: "Marcelo",
+       email: "kaohhs@gmail.com",
     
 
    }
@@ -71,7 +73,6 @@ server.post('/api/login', (req, res) =>{
        });
      });
  })
-
 
  // Authorization: Bearer <token>
 function verifyToken(req, res, next){
