@@ -1,5 +1,3 @@
-import React, { Component } from 'react';
-
 class App extends Component {
 
   constructor() {
@@ -113,8 +111,8 @@ class App extends Component {
         <nav className="light-blue darken-4">
           <div className="container">
             <div className="nav-wrapper">
-              <a href="#" className="brand-logo">MERN Stack</a>
-            </div>
+              <a href="/login" className="brand-logo">MERN Stack</a>
+              </div>
           </div>
         </nav>
 

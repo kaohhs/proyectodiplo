@@ -7,7 +7,9 @@ const { Mongoose } = require('./database');
 const app = express();
 const jwt = require('jsonwebtoken');
 const register = require('./controllers/registerController')
-const Task = require('./models/task')
+const Task = require('./models/task');
+const { validate } = require('schema-utils');
+
 
 app.use(express.json());
 
@@ -26,6 +28,8 @@ server.use(express.json());
 
 server.use('/api/tasks', require('./routes/task.routes'));
 
+
+// for register a user you may need provide the username, email, password and roles. If role is not defined, will auto-asign as a user profile by default.
 server.post('/api/register', async (req, res, next) =>{
     const data = await req.body;
     
@@ -37,22 +41,27 @@ server.post('/api/register', async (req, res, next) =>{
       }
   })
 
+
   
-//Searching by title 
+//Searching by title // use http://localhost:3001/post?title=(taskTitle)
   server.get('/post', async (req, res) =>{
       const title = req.query.title
       const searchResult = await Task.findOne({title: title})
       res.status(200).json(searchResult);
     })
-  
 
+//Searching by description, just not working at all. Always retrieve a null value.     
+  server.get('/description', async (req, res) =>{
+    const description = req.query.description
+    const searchDescriptionResult = await Task.find({description: description})
+    res.status(200).json(searchDescriptionResult);
+  })
 
-  server.post('/api/login', (req, res) =>{
+// This is where the token generates and allow to see stuff
+server.post('/api/login', (req, res) =>{
     const user = {
   
-       id: 1,
-       name: "Marcelo",
-       email: "kaohhs@gmail.com",
+       user
     
 
    }
@@ -63,7 +72,23 @@ server.post('/api/register', async (req, res, next) =>{
      });
  })
 
-  server.delete("/api/tasks", verifyToken, (req , res) => {
+
+ // Authorization: Bearer <token>
+function verifyToken(req, res, next){
+  const bearerHeader =  req.headers['authorization'];
+
+  if(typeof bearerHeader !== 'undefined'){
+       const bearerToken = bearerHeader.split(" ")[1];
+       req.token  = bearerToken;
+       next();
+       module.exports = verifyToken
+  }else{
+      res.sendStatus(403);
+  }
+}
+
+// Delete task - if we don't provide token on header and try http://localhost:3001/api/tasks will throw a 403 error because we didn not provided any authorized token on header for that operation. For getting the token, 1st  we must go into localhost://localhost:3001/api/login and get the Token. After that, we can set the header with the provided token by JWT and use DELETE method on Postman. 
+server.delete("/api/tasks", verifyToken, (req , res) => {
 
     jwt.verify(req.token, 'secretkey', (error, authData) => {
         if(error){
@@ -77,27 +102,16 @@ server.post('/api/register', async (req, res, next) =>{
     });
 });
 
-// Authorization: Bearer <token>
-function verifyToken(req, res, next){
-    const bearerHeader =  req.headers['authorization'];
-
-    if(typeof bearerHeader !== 'undefined'){
-         const bearerToken = bearerHeader.split(" ")[1];
-         req.token  = bearerToken;
-         next();
-    }else{
-        res.sendStatus(403);
-    }
-}
 
 
-// Archivos estaticos
+
+
+// Static Files
 
 server.use(express.static(path.join(__dirname, 'public')))
-// inicializando servidor
 
 
-
+// Starting Server
 
 server.listen(server.get('port') , () => {
     console.log(`Servidor ejecutandose en puerto ${server.get('port')}`)

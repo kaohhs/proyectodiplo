@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jsonwebtoken = require('jsonwebtoken');
 
+
 // Task Model
 const Task = require('../models/task');
 
@@ -19,7 +20,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // ADD a new task
-router.post('/', async (req, res) => {
+router.post('/', async  (req, res) => {
   const { title, description } = req.body;
   const task = new Task({title, description});
   await task.save();
