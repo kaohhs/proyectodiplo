@@ -21,7 +21,7 @@ http://localhost:3001/api/task
 retrieves the all tasks list in JSON format.
 
 http://localhost:3001/post?title=(taskTitle)
-for searching by exact match on task title.
+for searching by exact match on task title. Case sensitive.
 
 http://localhost:3001/api/task/:id 
 will retrieve the task under the mentioned ID on the JSON file.
